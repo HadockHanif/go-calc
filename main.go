@@ -30,7 +30,7 @@ func Pop(){
 }
 
 func checkPostfix(LL int){
-	fmt.Printf("%d\n",idx)
+	//fmt.Printf("%d\n",idx)
 	for i := 0; i<LL; i++ {
 		
 		if postfix[i] == plus{
@@ -212,7 +212,7 @@ func call(LL int){
 	var dic bool
 	dic = false
 	index := 0
-	fmt.Println(index)
+	//fmt.Println(index)
 	for i := 0; i < LL; {
 		if infix[i] == mul && infix[i-1] > brakcetOpen && infix[i+1] > brakcetOpen {
 			preInfix[index-1] = infix[i-1] * infix[i+1]
@@ -249,7 +249,7 @@ func call(LL int){
 func processInfix(LL int){
 	var index int
 	index = 0
-	checkInfix(LL)
+	//checkInfix(LL)
 	for i := 0; i<LL; {
 		if infix[i] < 0 {
 			if infix[i] == mul && infix[i-1]>brakcetOpen && infix[i+1]>brakcetOpen && mark[i-1] == 0 {
