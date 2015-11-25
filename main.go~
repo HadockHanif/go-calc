@@ -54,7 +54,7 @@ func infixToPostFix (LL int) {
 	index = 0
 	//fmt.Println(idx)	
 	for i := 0; i<LL; i++ {
-		if infix[i] >= 0{
+		if infix[i] > brakcetOpen{
 			postfix[index] = infix[i];
 			index++
 		} else{
@@ -93,7 +93,7 @@ func result(LL int){
 	var b int
 	//fmt.Printf("Yes\n")
 	for i := 0; i<LL;i++{
-		if postfix[i] >= 0 {
+		if postfix[i] > brakcetOpen {
 			Push(postfix[i])
 		} else if postfix[i] == plus {
 			a = arr[idx]
@@ -159,7 +159,11 @@ func Differentiate(s string)string{
 				if err != nil {
 					return "";
 				}
-				//fmt.Println("",ii)
+				fmt.Println("",ii)
+				if infix[index-1] == minus {
+					infix[index-1] = plus
+					ii *= -1
+				}
 				infix[index] = ii
 				index++
 			}
@@ -189,19 +193,29 @@ func Differentiate(s string)string{
 			ret += string(s[i])
 		}
 	}
-	//checkInfix(index)
+	checkInfix(index)
 	processInfix(index)
-	//infixToPostFix(index)			
+	infixToPostFix(index)			
 	return ret;
+}
+
+func initialize(){
+	brakcetOpen = -10001
+	brakcetClose = -10002
+	plus = -10003
+	minus = -10004
+	divide = -10005
+	mul = -10006
+	arr[0]	= -10000
 }
 
 func processInfix(LL int){
 	var index int
 	index = 0
-	checkInfix(LL)
+	//checkInfix(LL)
 	for i := 0; i<LL; {
 		if infix[i] < 0 {
-			if infix[i] == mul && infix[i-1]>=0 && infix[i+1]>=0 && mark[i-1] == 0 {
+			if infix[i] == mul && infix[i-1]>brakcetOpen && infix[i+1]>brakcetOpen && mark[i-1] == 0 {
 				preInfix[index-1] = brakcetOpen
 				preInfix[index] = infix[i-1]
 				index++
@@ -212,8 +226,9 @@ func processInfix(LL int){
 				preInfix[index] = brakcetClose
 				index++	
 				mark[i-1] = 1
+				mark[i+1] = 1
 				i += 2
-			}else if infix[i] == divide && infix[i-1]>=0 && infix[i+1]>=0 && mark[i-1] == 0 {
+			}else if infix[i] == divide && infix[i-1]>brakcetOpen && infix[i+1]>brakcetOpen && mark[i-1] == 0 {
 				preInfix[index-1] = brakcetOpen
 				preInfix[index] = infix[i-1]
 				index++
@@ -222,10 +237,11 @@ func processInfix(LL int){
 				preInfix[index] = infix[i+1]
 				index++;
 				mark[i-1] = 1
+				mark[i+1] = 1
 				preInfix[index] = brakcetClose
 				index++	
 				i += 2
-			}else if infix[i] == minus && infix[i-1]>=0 && infix[i+1]>=0 && mark[i-1] == 0 {
+			}else if infix[i] == minus && infix[i-1]>bracketOpen && infix[i+1]>bracketOpen && mark[i-1] == 0 {
 				preInfix[index-1] = brakcetOpen
 				preInfix[index] = infix[i-1]
 				index++
@@ -234,6 +250,7 @@ func processInfix(LL int){
 				preInfix[index] = infix[i+1]
 				index++;
 				mark[i-1] = 1
+				mark[i+1] = 1
 				preInfix[index] = brakcetClose
 				index++	
 				i += 2
@@ -276,22 +293,16 @@ func StackCheck(){
 }
 
 func main() {
-	
 	idx = 0
+	initialize()
+//	fmt.Println(minus)
 	var s string
-	brakcetOpen = -1
-	brakcetClose = -2
-	plus = -3
-	minus = -4
-	divide = -5
-	mul = -6
-	arr[0]	= -10
 	var tmp string
 	tmp = "("
 	fmt.Scanf("%s",&s)
 	tmp += s
 	tmp += ")"
-	//fmt.Printf("%s\n",tmp)
+//	fmt.Printf("%s\n",tmp)
 	Differentiate(tmp)
 	
 	
